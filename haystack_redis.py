@@ -1,6 +1,5 @@
 import os
-from cStringIO import StringIO
-from threading import Lock
+from io import BytesIO
 import tempfile
 
 from redis import from_url as redis
@@ -10,6 +9,7 @@ from whoosh.qparser import QueryParser
 from whoosh.filedb.structfile import StructFile
 from whoosh.filedb.filestore import Storage, FileStorage
 from whoosh.util import random_name
+from whoosh.util.filelock import FileLock
 
 from haystack.backends.whoosh_backend import WhooshSearchBackend, WhooshEngine
 
@@ -56,7 +56,7 @@ class RedisStorage(Storage):
         return -1
 
     def list(self):
-        return self.redis.hkeys("RedisStore:%s" % self.folder)
+        return [x.decode('utf-8') for x in self.redis.hkeys("RedisStore:%s" % self.folder)]
 
     def clean(self):
         self.redis.delete("RedisStore:%s" % self.folder)
@@ -92,7 +92,7 @@ class RedisStorage(Storage):
     def create_file(self, name, **kwargs):
         def onclose_fn(sfile):
             self.redis.hset("RedisStore:%s" % self.folder, name, sfile.file.getvalue())
-        f = StructFile(StringIO(), name=name, onclose=onclose_fn)
+        f = StructFile(BytesIO(), name=name, onclose=onclose_fn)
         return f
 
     def open_file(self, name, *args, **kwargs):
@@ -101,12 +101,13 @@ class RedisStorage(Storage):
         def onclose_fn(sfile):
             self.redis.hset("RedisStore:%s" % self.folder, name, sfile.file.getvalue())
         #print "Opened file %s %s " % (name, self.__file(name))
-        return StructFile(StringIO(self.__file(name)), name=name, onclose=onclose_fn, *args, **kwargs)
+        return StructFile(BytesIO(self.__file(name)), name=name, onclose=onclose_fn, *args, **kwargs)
 
     def lock(self, name):
-        if name not in self.locks:
-            self.locks[name] = Lock()
-        return self.locks[name]
+        tdir = tempfile.gettempdir()
+        name = "%s.lock" % name
+        path = os.path.join(tdir, name)
+        return FileLock(path)
 
     def temp_storage(self, name=None):
         tdir = tempfile.gettempdir()
@@ -114,4 +115,3 @@ class RedisStorage(Storage):
         path = os.path.join(tdir, name)
         tempstore = FileStorage(path)
         return tempstore.create()
-
