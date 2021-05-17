@@ -1,7 +1,7 @@
 haystack-redis
 ~~~~~~~~~~~~~~
 
-A Whoosh storage engine using redis for persistance. A Haystack
+A Whoosh storage engine using redis for persistence. A Haystack
 ``SearchBackend``  subclass is also provided. Normally the ``STORAGE`` key could
 just be set but Haystack 2.0.0beta is only aware of ``file`` and ``ram``
 backends.
@@ -31,8 +31,4 @@ Configure your Haystack connections in ``settings.py``::
 Installation
 ------------
 
-Currently some in-development features are still needed::
-
-    $ pip install -e git+https://github.com/andymccurdy/redis-py.git@master@egg=redis
-    $ pip install -e git+https://github.com/toastdriven/django-haystack.git@master#egg=django-haystack
-    $ pip install -e git+https://github.com/jokull/haystack-redis.git@master#egg=haystack-redis
+    $ pip install haystack-redis

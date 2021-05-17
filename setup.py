@@ -3,7 +3,7 @@
 haystack-redis
 ~~~~~~~~~~~~~~~~~~~~~~
 
-A Whoosh storage engine using redis for persistance. A Haystack
+A Whoosh storage engine using redis for persistence. A Haystack
 ``SearchBackend``  subclass is also provided. Normally the ``STORAGE`` key could
 just be set but Haystack 2.0.0alpha is only aware of ``file`` and ``ram``
 backends.
@@ -32,17 +32,19 @@ from setuptools import setup
 setup(
     name='haystack-redis',
     version='0.0.0',
-    url='https://github.com/jokull/haystack-redis',
+    url='https://github.com/steinbro/haystack-redis',
     license='BSD',
     author=u'Jökull Sólberg Auðunsson',
     author_email='jokull@solberg.is',
-    description='Use redis as a persistance layer for Whoosh and Haystack',
+    maintainer='Daniel W. Steinbrook',
+    maintainer_email='steinbro@post.harvard.edu',
+    description='Use redis as a persistence layer for Whoosh and Haystack',
     long_description=__doc__,
     py_modules=['haystack_redis'],
     zip_safe=False,
     include_package_data=True,
     platforms='any',
-    install_requires=['redis'],
+    install_requires=['haystack', 'redis', 'whoosh'],
     classifiers=[
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
