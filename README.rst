@@ -7,8 +7,7 @@ just be set but Haystack 2.0.0beta is only aware of ``file`` and ``ram``
 backends.
 
 This is especially useful for small sites hosted on Heroku, which does not allow
-writing to local disk. The ``REDISTOGO_URL`` environment variable is read,
-falling back to the localhost default port.
+writing to local disk..
 
 Code is based on maxpert_’s snippet (see blog post_)
 
@@ -24,7 +23,7 @@ Configure your Haystack connections in ``settings.py``::
     HAYSTACK_CONNECTIONS = {
         'default': {
             'ENGINE': 'haystack_redis.RedisEngine',
-            'PATH': tempfile.gettempdir(),
+            'PATH': 'redis://127.0.0.1:6379',
         },
     }
 
