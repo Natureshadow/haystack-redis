@@ -44,7 +44,7 @@ setup(
     zip_safe=False,
     include_package_data=True,
     platforms='any',
-    install_requires=['haystack', 'redis', 'whoosh'],
+    install_requires=['django-haystack', 'redis', 'whoosh'],
     classifiers=[
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
